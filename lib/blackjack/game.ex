@@ -56,9 +56,9 @@ defmodule Blackjack.Game do
     {[card1, card2], final_deck}
   end
 
-  def determine_winner(player_score, dealer_score) do
+  def determine_winner(player_hand, dealer_hand) do
     player_score = hand_value(player_hand)
-    dealer_score = hand_value(dealer_score)
+    dealer_score = hand_value(dealer_hand)
 
     cond do
       player_score > 21 -> :dealer
