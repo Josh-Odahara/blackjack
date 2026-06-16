@@ -9,7 +9,8 @@ defmodule Blackjack.Game do
 
   def new_deck() do
     suits = [:heart, :diamond, :spade, :club]
-    ranks =[2, 3, 4, 5, 6, 7, 8, 9, 10, :jack, :queen, :king, :ace]
+    ranks = [2, 3, 4, 5, 6, 7, 8, 9, 10, :jack, :queen, :king, :ace]
+
     for suit <- suits, rank <- ranks do
       {suit, rank}
     end
@@ -39,15 +40,16 @@ defmodule Blackjack.Game do
   def card_value({_suit, :ace}), do: 11
 
   def hand_value(hand) do
-    total = hand
-    |> Enum.map(&card_value/1)
-    |> Enum.sum()
+    total =
+      hand
+      |> Enum.map(&card_value/1)
+      |> Enum.sum()
 
-  if total > 21 and Enum.any?(hand, fn {_suit, rank} -> rank == :ace end) do
-    total - 10
-  else
-    total
-  end
+    if total > 21 and Enum.any?(hand, fn {_suit, rank} -> rank == :ace end) do
+      total - 10
+    else
+      total
+    end
   end
 
   def deal_initial_hand(deck) do
@@ -69,5 +71,4 @@ defmodule Blackjack.Game do
       true -> :new_game
     end
   end
-
 end
