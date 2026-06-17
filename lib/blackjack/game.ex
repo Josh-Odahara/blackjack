@@ -71,4 +71,8 @@ defmodule Blackjack.Game do
       true -> :new_game
     end
   end
+
+  def card_to_string({suit, rank}) do
+    to_string(rank) <> " of " <> to_string(suit)
+  end
 end
