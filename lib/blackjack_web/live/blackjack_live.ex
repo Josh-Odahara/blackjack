@@ -28,6 +28,14 @@ defmodule BlackjackWeb.BlackjackLive do
   end
 
   def handle_event("hit", _params, socket) do
-
+    deck = socket.assigns.deck
+    player_hand = socket.assigns.player_hand
+    {card, remaining_deck} = Blackjack.Game.deal_card(deck)
+    new_hand = [card | player_hand]
+    {:noreply, socket
+      |> assign(:deck, remaining_deck)
+      |> assign(:player_hand, new_hand)
+      |> assign(:game_status, (if Blackjack.Game.hand_value(new_hand) > 21, do: :dealer, else: :playing))}
   end
+
 end
