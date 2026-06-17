@@ -1,10 +1,11 @@
 defmodule BlackjackWeb.BlackjackLive do
   use BlackjackWeb, :live_view
+  alias Blackjack.Game
 
   def mount(_params, _session, socket) do
-    deck = Blackjack.Game.new_deck() |> Blackjack.Game.shuffle_deck()
-    {player_hand, remaining_deck} = Blackjack.Game.deal_initial_hand(deck)
-    {dealer_hand, final_deck} = Blackjack.Game.deal_initial_hand(remaining_deck)
+    deck = Game.new_deck() |> Game.shuffle_deck()
+    {player_hand, remaining_deck} = Game.deal_initial_hand(deck)
+    {dealer_hand, final_deck} = Game.deal_initial_hand(remaining_deck)
 
     {:ok,
      socket
@@ -15,9 +16,9 @@ defmodule BlackjackWeb.BlackjackLive do
   end
 
   def handle_event("new_game", _params, socket) do
-    deck = Blackjack.Game.new_deck() |> Blackjack.Game.shuffle_deck()
-    {player_hand, remaining_deck} = Blackjack.Game.deal_initial_hand(deck)
-    {dealer_hand, final_deck} = Blackjack.Game.deal_initial_hand(remaining_deck)
+    deck = Game.new_deck() |> Game.shuffle_deck()
+    {player_hand, remaining_deck} = Game.deal_initial_hand(deck)
+    {dealer_hand, final_deck} = Game.deal_initial_hand(remaining_deck)
 
     {:noreply,
      socket
@@ -30,7 +31,7 @@ defmodule BlackjackWeb.BlackjackLive do
   def handle_event("hit", _params, socket) do
     deck = socket.assigns.deck
     player_hand = socket.assigns.player_hand
-    {card, remaining_deck} = Blackjack.Game.deal_card(deck)
+    {card, remaining_deck} = Game.deal_card(deck)
     new_hand = [card | player_hand]
 
     {:noreply,
@@ -39,7 +40,7 @@ defmodule BlackjackWeb.BlackjackLive do
      |> assign(:player_hand, new_hand)
      |> assign(
        :game_status,
-       if(Blackjack.Game.hand_value(new_hand) > 21, do: :dealer, else: :playing)
+       if(Game.hand_value(new_hand) > 21, do: :dealer, else: :playing)
      )}
   end
 
@@ -52,12 +53,12 @@ defmodule BlackjackWeb.BlackjackLive do
     {:noreply,
      socket
      |> assign(:dealer_hand, new_dealer_hand)
-     |> assign(:game_status, Blackjack.Game.determine_winner(player_hand, new_dealer_hand))}
+     |> assign(:game_status, Game.determine_winner(player_hand, new_dealer_hand))}
   end
 
   defp dealer_play(dealer_hand, deck) do
-    if Blackjack.Game.hand_value(dealer_hand) < 17 do
-      {card, remaining_deck} = Blackjack.Game.deal_card(deck)
+    if Game.hand_value(dealer_hand) < 17 do
+      {card, remaining_deck} = Game.deal_card(deck)
       new_hand = [card | dealer_hand]
       dealer_play(new_hand, remaining_deck)
     else
@@ -74,22 +75,22 @@ defmodule BlackjackWeb.BlackjackLive do
 
       <div>
         <h1>
-          Dealer: {Blackjack.Game.hand_value(@dealer_hand)}
+          Dealer: {Game.hand_value(@dealer_hand)}
           <%= for card <- @dealer_hand do %>
-            <span>{Blackjack.Game.card_to_string(card)}</span>
+            <span>{Game.card_to_string(card)}</span>
           <% end %>
         </h1>
       </div>
 
       <div>
         <h1>
-          Player: {Blackjack.Game.hand_value(@player_hand)}
+          Player: {Game.hand_value(@player_hand)}
           <%= for card <- @player_hand do %>
-            <span>{Blackjack.Game.card_to_string(card)}</span>
+            <span>{Game.card_to_string(card)}</span>
           <% end %>
         </h1>
-        <button phx-click="hit">Hit Me</button>
-        <button phx-click="stand">Stand</button>
+        <button :if={@game_status == :playing} phx-click="hit">Hit Me</button>
+        <button :if={@game_status == :playing} phx-click="stand">Stand</button>
       </div>
 
       <div>
