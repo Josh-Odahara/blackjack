@@ -106,7 +106,9 @@ defmodule BlackjackWeb.BlackjackLive do
       </div>
 
       <div :if={@game_status == :tie}>
-        <h1>It's a tie</h1>
+        <h1>
+          It's a tie
+        </h1>
       </div>
     </div>
     """
