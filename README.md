@@ -47,13 +47,6 @@ Cards are represented as simple tuples, e.g. `{:hearts, :ace}` or `{:spades, 7}`
 - `handle_event("new_game", ...)` — resets the table for a new round
 - `render/1` — displays both hands, scores, and the result of the round
 
-## Getting Started
-
-### Prerequisites
-
-- Elixir & Erlang installed
-- Phoenix installed (`mix archive.install hex phx_new`)
-
 ### Setup
 
 ```bash
@@ -77,7 +70,3 @@ mix test
 - [ ] Claude-powered dealer (AI dealer turn via the Anthropic API, using `Task.async` + `handle_info`)
 - [ ] Visual card assets instead of text-based cards
 - [ ] Bankroll / betting system
-
-## About
-
-Built by [Josh Odahara](https://github.com/Josh-Odahara) while learning Elixir and Phoenix LiveView, transitioning from a non-engineering background toward a junior developer role.
